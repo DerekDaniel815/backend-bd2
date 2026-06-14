@@ -1,0 +1,42 @@
+# version: '3.8'
+
+services:
+  # 1. Base de Datos Relacional (PostgreSQL)
+  postgres-db:
+    image: postgres:15
+    container_name: BD2_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: rootpassword
+      POSTGRES_DB: BD2_db
+    ports:
+      - "5433:5432" # Puerto por defecto de Postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Base de Datos Documental (MongoDB)
+  mongo-db:
+    image: mongo:6.0
+    container_name: BD2_mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - "27017:27017" # Puerto por defecto de Mongo
+    volumes:
+      - mongo_data:/data/db
+
+  # 3. Caché de Alta Velocidad (Redis)
+  redis-db:
+    image: redis:alpine
+    container_name: BD2_redis
+    restart: always
+    ports:
+      - "6379:6379" # Puerto por defecto de Redis
+
+# Los volúmenes aseguran que si apagas tu PC, no se borren los datos
+volumes:
+  postgres_data:
+  mongo_data:
